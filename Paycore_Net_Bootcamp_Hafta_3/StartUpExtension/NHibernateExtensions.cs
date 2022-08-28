@@ -16,6 +16,8 @@ namespace Paycore_Net_Bootcamp_Hafta_3.StartUpExtension
         public static IServiceCollection AddNHibernatePosgreSql(this IServiceCollection services, string connectionString)
         {
             var mapper = new ModelMapper();
+
+            // config for entity mapping by auto implement
             mapper.AddMappings(typeof(NHibernateExtensions).Assembly.ExportedTypes);
             HbmMapping domainMapping = mapper.CompileMappingForAllExplicitlyAddedEntities();
 
@@ -31,6 +33,8 @@ namespace Paycore_Net_Bootcamp_Hafta_3.StartUpExtension
                 
             });
             configuration.AddMapping(domainMapping);
+
+            // for creating tables if not exists and use the existing data if exists
             new SchemaExport(configuration).Execute(true, false, false);
 
             var sessionFactory = configuration.BuildSessionFactory();

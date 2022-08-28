@@ -21,12 +21,14 @@ namespace Paycore_Net_Bootcamp_Hafta_3.Controller
 
             this.session = session;
         }
+        //get containers that own vehicle
         [HttpGet("GetContainersByVehicleId")]
         public List<Container> GetContainersByVehicleId(int id)
         {
             List<Container> result = session.Containers.Where(x => x.VehicleId == id).ToList();
             return result;
         }
+        //get cluster of container by given  vehicle id and cluster number 
         [HttpGet("GetClustersByVehicleId")]
         public ActionResult<List<List<Container>>> GetClustersByVehicleId(int id,int n)
         {
@@ -55,21 +57,21 @@ namespace Paycore_Net_Bootcamp_Hafta_3.Controller
             }
             return result;
         }
-
+        //get all vehicles
         // GET: api/<VehicleController>
         [HttpGet]
             public IEnumerable<Vehicle> Get()
             {
             return session.Vehicles; 
             }
-
+        //get vehicle by given id
             // GET api/<VehicleController>/5
             [HttpGet("{id}")]
             public Vehicle Get(int id)
             {
                 return session.Vehicles.Where(x => x.Id == id).FirstOrDefault();
         }
-
+        //create new vehicle
             // POST api/<VehicleController>
             [HttpPost]
             public void Post([FromBody] Vehicle vehicle)
@@ -90,7 +92,7 @@ namespace Paycore_Net_Bootcamp_Hafta_3.Controller
                 session.CloseTransaction();
             }
         }
-
+        //update existing vehicle
             // PUT api/<VehicleController>/5
             [HttpPut]
         public ActionResult<Vehicle> Put([FromBody] Vehicle request)
@@ -126,6 +128,7 @@ namespace Paycore_Net_Bootcamp_Hafta_3.Controller
 
             return Ok();
         }
+        //delete existing  vehicle
         [HttpDelete("{id}")]
         public ActionResult<Vehicle> Delete(int id)
         {

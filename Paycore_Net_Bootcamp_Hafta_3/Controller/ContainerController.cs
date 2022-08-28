@@ -21,21 +21,21 @@ namespace Paycore_Net_Bootcamp_Hafta_3.Controller
             this.session = session;
         }
 
-
+        //Get all containers
         // GET: api/<ContainerController>
         [HttpGet]
         public IEnumerable<Container> Get()
         {
             return session.Containers;
         }
-
+        //get container by given id
         // GET api/<ContainerController>/5
         [HttpGet("{id}")]
         public Container Get(int id)
         {
             return session.Containers.Where(x => x.Id == id).FirstOrDefault();
         }
-
+        //create new container 
         // POST api/<ContainerController>
         [HttpPost]
         public void Post([FromBody] Container container)
@@ -56,7 +56,7 @@ namespace Paycore_Net_Bootcamp_Hafta_3.Controller
                 session.CloseTransaction();
             }
         }
-
+        //update existing container
         // PUT api/<ContainerController>/5
         [HttpPut]
         public ActionResult<Container> Put([FromBody] Container request)
@@ -70,7 +70,7 @@ namespace Paycore_Net_Bootcamp_Hafta_3.Controller
             try
             {
                 session.BeginTransaction();
-
+                //update all attribute except vehicle id
                 container.ContainerName = request.ContainerName;
                 container.Longitude = request.Longitude;
                 container.Latitude = request.Latitude;
@@ -94,6 +94,7 @@ namespace Paycore_Net_Bootcamp_Hafta_3.Controller
 
             return Ok();
         }
+        //delete existing contanier
         [HttpDelete("{id}")]
         public ActionResult<Container> Delete(int id)
         {

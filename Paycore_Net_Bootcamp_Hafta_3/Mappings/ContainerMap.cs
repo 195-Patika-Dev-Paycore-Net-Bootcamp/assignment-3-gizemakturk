@@ -7,6 +7,7 @@ using FluentNHibernate.Automapping;
 
 namespace Paycore_Net_Bootcamp_Hafta_3.Mappings
 {
+    //mapping config for determine table of container
     public class ContainerMap:ClassMapping<Container>
     {
         public ContainerMap()

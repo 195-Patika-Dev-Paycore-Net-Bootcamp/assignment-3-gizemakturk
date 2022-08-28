@@ -5,6 +5,8 @@ using NHibernate.Mapping.ByCode.Conformist;
 
 namespace Paycore_Net_Bootcamp_Hafta_3.Mappings
 {
+    //mapping config for determine table of vehicle
+
     public class VehicleMap:ClassMapping<Vehicle>
     {
         public VehicleMap()
