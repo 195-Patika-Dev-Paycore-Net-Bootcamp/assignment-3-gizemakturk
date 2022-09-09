@@ -3,26 +3,26 @@ using System.Linq;
 
 namespace Paycore_Net_Bootcamp_Hafta_3.Context
 {
-    public interface IMapperSession
+    public interface IMapperSession<T>
     {
         void BeginTransaction();
         void Commit();
         void Rollback();
         void CloseTransaction();
         //CRUD operations for vehicle
-        void Save(Vehicle entity);
-        void Update(Vehicle entity);
-        void Delete(Vehicle entity);
+        void Save(T entity);
+        void Update(T entity);
+        void Delete(T entity);
 
-        //CRUD operations for container
+        ////CRUD operations for container
 
-        void Save(Container entity);
-        void Update(Container entity);
-        void Delete(Container entity);
+        //void Save(Container entity);
+        //void Update(Container entity);
+        //void Delete(Container entity);
 
 
-        IQueryable<Vehicle> Vehicles { get; }
-        IQueryable<Container> Containers { get; }
+        //IQueryable<Vehicle> Vehicles { get; }
+        IQueryable<T> Entities { get; }
 
        
     }

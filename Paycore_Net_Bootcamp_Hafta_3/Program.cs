@@ -13,6 +13,7 @@ namespace Paycore_Net_Bootcamp_Hafta_3
     {
         public static void Main(string[] args)
         {
+            
             CreateHostBuilder(args).Build().Run();
         }
 

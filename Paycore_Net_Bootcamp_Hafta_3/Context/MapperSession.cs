@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace Paycore_Net_Bootcamp_Hafta_3.Context
 {
 
-    public class MapperSession : IMapperSession
+    public class MapperSession<T> : IMapperSession<T>
     {private readonly ISession session;
         private ITransaction transaction;
         public MapperSession(ISession session)
@@ -41,36 +41,53 @@ namespace Paycore_Net_Bootcamp_Hafta_3.Context
             }
         }
 
-        public void Save(Vehicle entity)
+        //public void Save(Vehicle entity)
+        //{
+        //    session.Save(entity);
+        //}
+        //public void Update(Vehicle entity)
+        //{
+        //    session.Update(entity);
+        //}
+        //public void Delete(Vehicle entity)
+        //{
+        //    session.Delete(entity);
+        //}
+
+        //public void Save(Container entity)
+        //{
+        //    session.Save(entity);
+        //}
+
+        //public void Update(Container entity)
+        //{
+        //    session.Update(entity);
+        //}
+
+        //public void Delete(Container entity)
+        //{
+        //    session.Delete(entity);
+        //}
+
+        public void Save(T entity)
         {
-            session.Save(entity);
-        }
-        public void Update(Vehicle entity)
-        {
-            session.Update(entity);
-        }
-        public void Delete(Vehicle entity)
-        {
-            session.Delete(entity);
+            throw new System.NotImplementedException();
         }
 
-        public void Save(Container entity)
+        public void Update(T entity)
         {
-            session.Save(entity);
+            throw new System.NotImplementedException();
         }
 
-        public void Update(Container entity)
+        public void Delete(T entity)
         {
-            session.Update(entity);
+            throw new System.NotImplementedException();
         }
 
-        public void Delete(Container entity)
-        {
-            session.Delete(entity);
-        }
+        //public IQueryable<Vehicle> Vehicles => session.Query<Vehicle>();
 
-        public IQueryable<Vehicle> Vehicles => session.Query<Vehicle>();
+        //public IQueryable<Container> Containers => session.Query<Container>();
 
-        public IQueryable<Container> Containers => session.Query<Container>();
+        public IQueryable<T> Entities => session.Query<T>();
     }
 }

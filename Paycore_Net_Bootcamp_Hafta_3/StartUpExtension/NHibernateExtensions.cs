@@ -44,7 +44,9 @@ namespace Paycore_Net_Bootcamp_Hafta_3.StartUpExtension
 
 
             // inject
-            services.AddScoped<IMapperSession, MapperSession>();
+            services.AddScoped<IMapperSession<Container>, MapperSession<Container>>();
+            services.AddScoped<IMapperSession<Vehicle>, MapperSession<Vehicle>>();
+
 
             return services;
         }

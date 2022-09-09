@@ -14,11 +14,14 @@ namespace Paycore_Net_Bootcamp_Hafta_3.Controller
     public class ContainerController : ControllerBase
     {
 
-        private readonly IMapperSession session;
+        private readonly IMapperSession<Container> sessionContainer;
+        
 
-        public ContainerController(IMapperSession session)
+
+        public ContainerController(IMapperSession<Container> sessionContainer)
         {
-            this.session = session;
+            this.sessionContainer = sessionContainer;
+
         }
 
         //Get all containers
@@ -26,14 +29,14 @@ namespace Paycore_Net_Bootcamp_Hafta_3.Controller
         [HttpGet]
         public IEnumerable<Container> Get()
         {
-            return session.Containers;
+            return sessionContainer.Entities;
         }
         //get container by given id
         // GET api/<ContainerController>/5
         [HttpGet("{id}")]
         public Container Get(int id)
         {
-            return session.Containers.Where(x => x.Id == id).FirstOrDefault();
+            return sessionContainer.Entities.Where(x => x.Id == id).FirstOrDefault();
         }
         //create new container 
         // POST api/<ContainerController>
@@ -42,18 +45,18 @@ namespace Paycore_Net_Bootcamp_Hafta_3.Controller
         {
             try
             {
-                session.BeginTransaction();
-                session.Save(container);
-                session.Commit();
+                sessionContainer.BeginTransaction();
+                sessionContainer.Save(container);
+                sessionContainer.Commit();
             }
             catch (Exception ex)
             {
-                session.Rollback();
+                sessionContainer.Rollback();
                 Log.Error(ex, "containers Insert Error");
             }
             finally
             {
-                session.CloseTransaction();
+                sessionContainer.CloseTransaction();
             }
         }
         //update existing container
@@ -61,7 +64,7 @@ namespace Paycore_Net_Bootcamp_Hafta_3.Controller
         [HttpPut]
         public ActionResult<Container> Put([FromBody] Container request)
         {
-            Container container = session.Containers.Where(x => x.Id == request.Id).FirstOrDefault();
+            Container container = sessionContainer.Entities.Where(x => x.Id == request.Id).FirstOrDefault();
             if (container == null)
             {
                 return NotFound();
@@ -69,7 +72,7 @@ namespace Paycore_Net_Bootcamp_Hafta_3.Controller
 
             try
             {
-                session.BeginTransaction();
+                sessionContainer.BeginTransaction();
                 //update all attribute except vehicle id
                 container.ContainerName = request.ContainerName;
                 container.Longitude = request.Longitude;
@@ -77,18 +80,18 @@ namespace Paycore_Net_Bootcamp_Hafta_3.Controller
 
 
 
-                session.Update(container);
+                sessionContainer.Update(container);
 
-                session.Commit();
+                sessionContainer.Commit();
             }
             catch (Exception ex)
             {
-                session.Rollback();
+                sessionContainer.Rollback();
                 Log.Error(ex, "container Insert Error");
             }
             finally
             {
-                session.CloseTransaction();
+                sessionContainer.CloseTransaction();
             }
 
 
@@ -98,7 +101,7 @@ namespace Paycore_Net_Bootcamp_Hafta_3.Controller
         [HttpDelete("{id}")]
         public ActionResult<Container> Delete(int id)
         {
-            Container container = session.Containers.Where(x => x.Id == id).FirstOrDefault();
+            Container container = sessionContainer.Entities.Where(x => x.Id == id).FirstOrDefault();
             if (container == null)
             {
                 return NotFound();
@@ -106,18 +109,18 @@ namespace Paycore_Net_Bootcamp_Hafta_3.Controller
 
             try
             {
-                session.BeginTransaction();
-                session.Delete(container);
-                session.Commit();
+                sessionContainer.BeginTransaction();
+                sessionContainer.Delete(container);
+                sessionContainer.Commit();
             }
             catch (Exception ex)
             {
-                session.Rollback();
+                sessionContainer.Rollback();
                 Log.Error(ex, "container Insert Error");
             }
             finally
             {
-                session.CloseTransaction();
+                sessionContainer.CloseTransaction();
             }
 
             return Ok();

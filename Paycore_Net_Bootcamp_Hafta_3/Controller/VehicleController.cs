@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+
 namespace Paycore_Net_Bootcamp_Hafta_3.Controller
 {
     [Route("api/[controller]")]
@@ -14,30 +15,37 @@ namespace Paycore_Net_Bootcamp_Hafta_3.Controller
     public class VehicleController  : ControllerBase
     {
 
-        private readonly IMapperSession session;
+        private readonly IMapperSession<Vehicle> sessionVehicle;
+        private readonly IMapperSession<Container> sessionContainer;
 
-            public VehicleController(IMapperSession session)
+
+        public VehicleController(IMapperSession<Vehicle> sessionVehicle, IMapperSession<Container> sessionContainer)
             {
 
-            this.session = session;
+            this.sessionVehicle = sessionVehicle;
+            this.sessionContainer = sessionContainer;
         }
         //get containers that own vehicle
         [HttpGet("GetContainersByVehicleId")]
         public List<Container> GetContainersByVehicleId(int id)
         {
-            List<Container> result = session.Containers.Where(x => x.VehicleId == id).ToList();
+            List<Container> result = sessionContainer.Entities.Where(x => x.VehicleId == id).ToList();
+           
             return result;
         }
         //get cluster of container by given  vehicle id and cluster number 
         [HttpGet("GetClustersByVehicleId")]
         public ActionResult<List<List<Container>>> GetClustersByVehicleId(int id,int n)
         {
-            List<Container> containers = session.Containers.Where(x => x.VehicleId == id).ToList();
+            List<Container> containers = sessionContainer.Entities.Where(x => x.VehicleId == id).ToList();
             List<List<Container>> result = new List<List<Container>>();
             if (containers.Count < n)
             {
                 return BadRequest("N must be smaller than containers.");
             }
+
+          
+
             int elementsInContainer = containers.Count / n; 
             int excessElements = containers.Count % n;
             int index = 0;
@@ -62,14 +70,14 @@ namespace Paycore_Net_Bootcamp_Hafta_3.Controller
         [HttpGet]
             public IEnumerable<Vehicle> Get()
             {
-            return session.Vehicles; 
+            return sessionVehicle.Entities; 
             }
         //get vehicle by given id
             // GET api/<VehicleController>/5
             [HttpGet("{id}")]
             public Vehicle Get(int id)
             {
-                return session.Vehicles.Where(x => x.Id == id).FirstOrDefault();
+                return sessionVehicle.Entities.Where(x => x.Id == id).FirstOrDefault();
         }
         //create new vehicle
             // POST api/<VehicleController>
@@ -78,18 +86,18 @@ namespace Paycore_Net_Bootcamp_Hafta_3.Controller
             {
             try
             {
-                session.BeginTransaction();
-                session.Save(vehicle);
-                session.Commit();
+                sessionVehicle.BeginTransaction();
+                sessionVehicle.Save(vehicle);
+                sessionVehicle.Commit();
             }
             catch (Exception ex)
             {
-                session.Rollback();
+                sessionVehicle.Rollback();
                 Log.Error(ex, "vehicles Insert Error");
             }
             finally
             {
-                session.CloseTransaction();
+                sessionVehicle.CloseTransaction();
             }
         }
         //update existing vehicle
@@ -97,7 +105,7 @@ namespace Paycore_Net_Bootcamp_Hafta_3.Controller
             [HttpPut]
         public ActionResult<Vehicle> Put([FromBody] Vehicle request)
         {
-            Vehicle vehicle = session.Vehicles.Where(x => x.Id == request.Id).FirstOrDefault();
+            Vehicle vehicle = sessionVehicle.Entities.Where(x => x.Id == request.Id).FirstOrDefault();
             if (vehicle == null)
             {
                 return NotFound();
@@ -105,24 +113,24 @@ namespace Paycore_Net_Bootcamp_Hafta_3.Controller
 
             try
             {
-                session.BeginTransaction();
+                sessionVehicle.BeginTransaction();
 
                 vehicle.VehicleName = request.VehicleName;
                 vehicle.VehiclePlate = request.VehiclePlate;
-               
 
-                session.Update(vehicle);
 
-                session.Commit();
+                sessionVehicle.Update(vehicle);
+
+                sessionVehicle.Commit();
             }
             catch (Exception ex)
             {
-                session.Rollback();
+                sessionVehicle.Rollback();
                 Log.Error(ex, "vehicle Insert Error");
             }
             finally
             {
-                session.CloseTransaction();
+                sessionVehicle.CloseTransaction();
             }
 
 
@@ -132,7 +140,7 @@ namespace Paycore_Net_Bootcamp_Hafta_3.Controller
         [HttpDelete("{id}")]
         public ActionResult<Vehicle> Delete(int id)
         {
-            Vehicle vehicle = session.Vehicles.Where(x => x.Id == id).FirstOrDefault();
+            Vehicle vehicle = sessionVehicle.Entities.Where(x => x.Id == id).FirstOrDefault();
             if (vehicle == null)
             {
                 return NotFound();
@@ -140,18 +148,18 @@ namespace Paycore_Net_Bootcamp_Hafta_3.Controller
 
             try
             {
-                session.BeginTransaction();
-                session.Delete(vehicle);
-                session.Commit();
+                sessionVehicle.BeginTransaction();
+                sessionVehicle.Delete(vehicle);
+                sessionVehicle.Commit();
             }
             catch (Exception ex)
             {
-                session.Rollback();
+                sessionVehicle.Rollback();
                 Log.Error(ex, "vehicle Insert Error");
             }
             finally
             {
-                session.CloseTransaction();
+                sessionVehicle.CloseTransaction();
             }
 
             return Ok();
